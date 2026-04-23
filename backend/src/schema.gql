@@ -1,0 +1,90 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: ID!
+  username: String!
+  email: String!
+  createdAt: String
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+type Post {
+  _id: ID!
+  userId: String!
+  mediaUrl: String!
+  caption: String
+  type: String!
+  createdAt: String
+}
+
+type Follow {
+  _id: ID!
+  followerId: String!
+  followingId: String!
+}
+
+type Message {
+  _id: ID!
+  chatId: String!
+  senderId: String!
+  text: String!
+  createdAt: String
+}
+
+type ChatSummary {
+  chatId: ID!
+  otherUserId: String!
+  lastMessage: String
+}
+
+type Query {
+  getFeed: [Post!]!
+  getUserPosts(userId: String!): [Post!]!
+  getReels: [Post!]!
+  getFollowersCount(userId: String!): Float!
+  getFollowingCount(userId: String!): Float!
+  getUserChats(userId: String!): [ChatSummary!]!
+  getMessages(chatId: String!): [Message!]!
+}
+
+type Mutation {
+  register(input: RegisterInput!): User!
+  login(input: LoginInput!): AuthResponse!
+  createPost(input: CreatePostInput!): Post!
+  followUser(userId: String!): Follow!
+  unfollowUser(userId: String!): Boolean!
+  sendMessage(input: SendMessageInput!): Message!
+}
+
+input RegisterInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  identifier: String!
+  password: String!
+}
+
+input CreatePostInput {
+  mediaUrl: String!
+  caption: String
+  type: String!
+}
+
+input SendMessageInput {
+  chatId: String
+  receiverId: String!
+  text: String!
+}
+
+type Subscription {
+  messageReceived(chatId: String!): Message!
+}
