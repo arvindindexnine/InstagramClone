@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,30 +6,65 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useQuery } from '@apollo/client';
-import colors from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { GET_USER_CHATS } from '../../graphql/chat/chats.query';
 import { ChatStackParamList } from '../../navigation/AppNavigator';
 
 type ChatNavProp = NativeStackNavigationProp<ChatStackParamList, 'ChatList'>;
 
-const TEMP_USER_ID = 'user_default';
-
 type ChatItem = {
   chatId: string;
   otherUserId: string;
+  otherUsername: string;
   lastMessage: string;
+  updatedAt: string;
 };
 
 export default function ChatScreen() {
+  const { theme } = useTheme();
   const navigation = useNavigation<ChatNavProp>();
-  const { data, loading } = useQuery(GET_USER_CHATS, {
-    variables: { userId: TEMP_USER_ID },
+  const [currentUserId, setCurrentUserId] = useState<string>('');
+
+  useEffect(() => {
+    loadUserId();
+  }, []);
+
+  async function loadUserId() {
+    try {
+      const stored = await AsyncStorage.getItem('user_data');
+      if (stored) {
+        const user = JSON.parse(stored);
+        setCurrentUserId(user._id);
+      }
+    } catch (e) {
+      console.log('Error loading user:', e);
+    }
+  }
+
+  const { data, loading, refetch } = useQuery(GET_USER_CHATS, {
+    variables: { userId: currentUserId },
+    skip: !currentUserId,
   });
 
+  useFocusEffect(
+    React.useCallback(() => {
+      if (currentUserId) {
+        console.log('ChatScreen focused, refetching chats');
+        refetch();
+      }
+    }, [currentUserId, refetch])
+  );
+
+  console.log('ChatScreen data:', data);
+  console.log('Current user ID:', currentUserId);
+
   const chats: ChatItem[] = data?.getUserChats ?? [];
+  
+  console.log('Chats count:', chats.length);
 
   function renderChat({ item }: { item: ChatItem }) {
     return (
@@ -38,12 +73,13 @@ export default function ChatScreen() {
         onPress={() => navigation.navigate('ChatDetail', {
           chatId: item.chatId,
           otherUserId: item.otherUserId,
+          otherUsername: item.otherUsername,
         })}
       >
-        <View style={styles.avatar} />
+        <View style={[styles.avatar, { backgroundColor: theme.inputBackground }]} />
         <View style={styles.chatInfo}>
-          <Text style={styles.username}>{item.otherUserId}</Text>
-          <Text style={styles.lastMessage} numberOfLines={1}>
+          <Text style={[styles.username, { color: theme.text }]}>{item.otherUsername}</Text>
+          <Text style={[styles.lastMessage, { color: theme.textMuted }]} numberOfLines={1}>
             {item.lastMessage || 'No messages yet'}
           </Text>
         </View>
@@ -52,15 +88,24 @@ export default function ChatScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Messages</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={[styles.header, { borderBottomColor: theme.inputBorder }]}>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>Messages</Text>
+        <TouchableOpacity 
+          onPress={() => {
+            console.log('Manual refresh triggered');
+            refetch();
+          }}
+          style={{ padding: 8 }}
+        >
+          <Text style={{ color: theme.primary, fontSize: 16 }}>↻</Text>
+        </TouchableOpacity>
       </View>
 
       {loading ? (
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={[styles.loadingText, { color: theme.textMuted }]}>Loading...</Text>
       ) : chats.length === 0 ? (
-        <Text style={styles.loadingText}>No conversations yet</Text>
+        <Text style={[styles.loadingText, { color: theme.textMuted }]}>No conversations yet</Text>
       ) : (
         <FlatList
           data={chats}
@@ -75,22 +120,21 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 52,
     paddingBottom: 12,
     borderBottomWidth: 0.5,
-    borderBottomColor: colors.inputBorder,
   },
   headerTitle: {
-    color: colors.text,
     fontSize: 20,
     fontWeight: '700',
   },
   loadingText: {
-    color: colors.textMuted,
     textAlign: 'center',
     marginTop: 40,
   },
@@ -105,19 +149,16 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: colors.inputBackground,
   },
   chatInfo: {
     flex: 1,
   },
   username: {
-    color: colors.text,
     fontWeight: '600',
     fontSize: 14,
     marginBottom: 3,
   },
   lastMessage: {
-    color: colors.textMuted,
     fontSize: 13,
   },
 });

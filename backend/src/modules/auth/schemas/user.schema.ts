@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-// user schema
+
 @ObjectType()
 @Schema({ timestamps: true })
 export class User {

@@ -47,4 +47,17 @@ export class AuthService {
     const token = this.jwtService.sign({ userId: user._id });
     return { token, user };
   }
+
+  async searchUsers(query: string): Promise<UserDocument[]> {
+    if (!query || query.length < 2) {
+      return [];
+    }
+
+    return this.userModel
+      .find({
+        username: { $regex: query, $options: 'i' },
+      })
+      .limit(20)
+      .select('_id username');
+  }
 }

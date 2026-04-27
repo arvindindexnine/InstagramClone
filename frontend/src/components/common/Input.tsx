@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
-import colors from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Props = {
   value: string;
@@ -10,13 +10,19 @@ type Props = {
 };
 
 export default function Input({ value, onChangeText, placeholder, secureTextEntry }: Props) {
+  const { theme } = useTheme();
+  
   return (
     <TextInput
-      style={styles.input}
+      style={[styles.input, { 
+        backgroundColor: theme.inputBackground,
+        borderColor: theme.inputBorder,
+        color: theme.text
+      }]}
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
-      placeholderTextColor={colors.placeholder}
+      placeholderTextColor={theme.placeholder}
       secureTextEntry={secureTextEntry}
       autoCapitalize="none"
     />
@@ -25,14 +31,11 @@ export default function Input({ value, onChangeText, placeholder, secureTextEntr
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: colors.inputBackground,
     borderWidth: 1,
-    borderColor: colors.inputBorder,
     borderRadius: 8,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 14,
-    color: colors.text,
     marginBottom: 12,
   },
 });

@@ -1,10 +1,8 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   scroll: {
     flexGrow: 1,
@@ -16,11 +14,9 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backArrow: {
-    color: colors.text,
     fontSize: 22,
   },
   title: {
-    color: colors.text,
     fontSize: 26,
     fontWeight: '600',
     marginBottom: 28,
@@ -41,11 +37,9 @@ export const styles = StyleSheet.create({
     marginTop: 8,
   },
   loginText: {
-    color: colors.textMuted,
     fontSize: 13,
   },
   loginLink: {
-    color: colors.primary,
     fontSize: 13,
     fontWeight: '600',
   },

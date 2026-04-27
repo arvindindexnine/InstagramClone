@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import colors from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Props = {
   label: string;
@@ -9,15 +9,24 @@ type Props = {
 };
 
 export default function Button({ label, onPress, variant = 'primary' }: Props) {
+  const { theme } = useTheme();
   const isOutline = variant === 'outline';
 
   return (
     <TouchableOpacity
-      style={[styles.button, isOutline ? styles.outline : styles.primary]}
+      style={[
+        styles.button, 
+        isOutline 
+          ? { backgroundColor: 'transparent', borderWidth: 1, borderColor: theme.buttonOutlineBorder }
+          : { backgroundColor: theme.primary }
+      ]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Text style={[styles.label, isOutline ? styles.outlineLabel : styles.primaryLabel]}>
+      <Text style={[
+        styles.label, 
+        { color: isOutline ? theme.buttonOutlineText : '#fff' }
+      ]}>
         {label}
       </Text>
     </TouchableOpacity>
@@ -31,22 +40,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  primary: {
-    backgroundColor: colors.primary,
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: colors.buttonOutlineBorder,
-  },
   label: {
     fontSize: 14,
     fontWeight: '600',
-  },
-  primaryLabel: {
-    color: '#fff',
-  },
-  outlineLabel: {
-    color: colors.buttonOutlineText,
   },
 });

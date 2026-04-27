@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMutation } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../../theme/ThemeContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { AuthStackParamList } from '../../navigation/AuthNavigator';
@@ -29,6 +30,7 @@ export function notifyTokenChange() {
 }
 
 export default function LoginScreen() {
+  const { theme } = useTheme();
   const navigation = useNavigation<LoginNavProp>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -49,9 +51,14 @@ export default function LoginScreen() {
       });
 
       await AsyncStorage.setItem('auth_token', data.login.token);
+      await AsyncStorage.setItem('user_data', JSON.stringify(data.login.user));
       notifyTokenChange();
     } catch (e: any) {
-      setError(e.message || 'Login failed');
+      if (e.message.includes('Network request failed')) {
+        setError('Cannot connect to server. Please check if backend is running.');
+      } else {
+        setError(e.message || 'Login failed');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -63,16 +70,16 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.language}>English (UK) ▾</Text>
+        <Text style={[styles.language, { color: theme.textMuted }]}>English (UK) ▾</Text>
 
-        <Text style={styles.logo}>Instagram</Text>
+        <Text style={[styles.logo, { color: theme.text }]}>Instagram</Text>
 
         <View style={styles.form}>
           <Input
@@ -95,7 +102,7 @@ export default function LoginScreen() {
           />
         </View>
 
-        <Text style={styles.forgotPassword}>
+        <Text style={[styles.forgotPassword, { color: theme.textMuted }]}>
           Forgot password?
         </Text>
 
@@ -107,7 +114,7 @@ export default function LoginScreen() {
           />
         </View>
 
-        <Text style={styles.footer}>Meta</Text>
+        <Text style={[styles.footer, { color: theme.footer }]}>Meta</Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );

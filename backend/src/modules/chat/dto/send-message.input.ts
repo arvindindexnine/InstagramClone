@@ -9,5 +9,8 @@ export class SendMessageInput {
   receiverId: string;
 
   @Field()
+  senderId: string;
+
+  @Field()
   text: string;
 }

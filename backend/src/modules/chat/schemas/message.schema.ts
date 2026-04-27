@@ -22,8 +22,11 @@ export class Message {
   @Field()
   text: string;
 
-  @Field(() => String, { nullable: true })
-  createdAt?: Date;
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Field(() => Date)
+  updatedAt: Date;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

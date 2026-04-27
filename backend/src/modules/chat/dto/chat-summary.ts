@@ -8,6 +8,12 @@ export class ChatSummary {
   @Field()
   otherUserId: string;
 
+  @Field()
+  otherUsername: string;
+
   @Field({ nullable: true })
   lastMessage?: string;
+
+  @Field(() => Date)
+  updatedAt: Date;
 }

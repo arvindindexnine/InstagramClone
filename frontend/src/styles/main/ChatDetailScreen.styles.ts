@@ -1,10 +1,8 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -14,20 +12,30 @@ export const styles = StyleSheet.create({
     paddingBottom: 12,
     gap: 14,
     borderBottomWidth: 0.5,
-    borderBottomColor: colors.inputBorder,
   },
   backBtn: {
-    color: colors.text,
     fontSize: 22,
   },
   headerTitle: {
-    color: colors.text,
     fontSize: 16,
     fontWeight: '600',
   },
   messageList: {
     padding: 16,
     gap: 8,
+  },
+  emptyMessageList: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 16,
   },
   bubble: {
     maxWidth: '75%',
@@ -37,15 +45,12 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
   },
   bubbleLeft: {
-    backgroundColor: colors.inputBackground,
     alignSelf: 'flex-start',
   },
   bubbleRight: {
-    backgroundColor: colors.primary,
     alignSelf: 'flex-end',
   },
   bubbleText: {
-    color: colors.text,
     fontSize: 14,
   },
   inputRow: {
@@ -54,20 +59,16 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderTopWidth: 0.5,
-    borderTopColor: colors.inputBorder,
     gap: 10,
   },
   input: {
     flex: 1,
-    backgroundColor: colors.inputBackground,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    color: colors.text,
     fontSize: 14,
   },
   sendBtn: {
-    backgroundColor: colors.primary,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,

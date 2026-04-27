@@ -22,8 +22,8 @@ export async function fetchUsers() {
 
 export function fetchReels() {
   try {
-    const mediaData = require('../data/media.json');
-    return mediaData.categories[0].videos;
+    const { mockReels } = require('../data/mockreels');
+    return mockReels;
   } catch (error) {
     console.log('Error loading reels:', error);
     return [];

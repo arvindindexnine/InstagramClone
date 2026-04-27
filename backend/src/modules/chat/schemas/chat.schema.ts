@@ -14,8 +14,11 @@ export class Chat {
   @Field(() => [String])
   participants: string[];
 
-  @Field(() => String, { nullable: true })
-  updatedAt?: Date;
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @Field(() => Date)
+  createdAt: Date;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

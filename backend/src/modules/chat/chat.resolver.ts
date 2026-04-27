@@ -6,7 +6,6 @@ import { Message } from './schemas/message.schema';
 import { ChatSummary } from './dto/chat-summary';
 import { SendMessageInput } from './dto/send-message.input';
 
-const TEMP_USER_ID = 'user_default';
 const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 
 @Resolver()
@@ -28,12 +27,24 @@ export class ChatResolver {
 
   @Mutation(() => Message)
   async sendMessage(@Args('input') input: SendMessageInput): Promise<Message> {
-    const { text, receiverId, chatId } = input;
-    const message = await this.chatService.sendMessage(text, receiverId, TEMP_USER_ID, chatId);
+    const { text, receiverId, chatId, senderId } = input;
+    const message = await this.chatService.sendMessage(text, receiverId, senderId, chatId);
+    
     this.pubSub.publish(`${MESSAGE_RECEIVED}_${message.chatId}`, {
       messageReceived: message,
     });
+    
     return message;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteAllChats(): Promise<boolean> {
+    return this.chatService.deleteAllChats();
+  }
+
+  @Mutation(() => Boolean)
+  async deleteAllMessages(): Promise<boolean> {
+    return this.chatService.deleteAllMessages();
   }
 
   @Subscription(() => Message, {

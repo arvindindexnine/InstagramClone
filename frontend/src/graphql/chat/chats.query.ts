@@ -5,7 +5,9 @@ export const GET_USER_CHATS = gql`
     getUserChats(userId: $userId) {
       chatId
       otherUserId
+      otherUsername
       lastMessage
+      updatedAt
     }
   }
 `;

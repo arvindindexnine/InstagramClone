@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_POST = gql`
-  mutation CreatePost($input: CreatePostInput!) {
-    createPost(input: $input) {
+export const GET_FEED = gql`
+  query GetFeed {
+    getFeed {
       _id
       userId
       username

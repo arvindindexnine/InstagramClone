@@ -78,9 +78,14 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
+  loadingText: {
+    textAlign: 'center',
+    marginTop: 40,
+    fontSize: 14,
+  },
   gridItem: {
     width: ITEM_SIZE,
-    height: ITEM_SIZE,
+    aspectRatio: 1,
     borderWidth: 1,
     borderColor: '#000',
   },

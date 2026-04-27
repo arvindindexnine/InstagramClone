@@ -26,7 +26,12 @@ export class PostsResolver {
 
   @Mutation(() => Post)
   async createPost(@Args('input') input: CreatePostInput): Promise<Post> {
-    const { caption, mediaUrl, type } = input;
-    return this.postsService.createPost(caption || '', mediaUrl, type, TEMP_USER_ID);
+    const { username, caption, mediaUrl, type } = input;
+    return this.postsService.createPost(username, caption || '', mediaUrl, type, TEMP_USER_ID);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteAllPosts(): Promise<boolean> {
+    return this.postsService.deleteAllPosts();
   }
 }

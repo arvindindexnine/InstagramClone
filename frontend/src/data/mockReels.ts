@@ -1,0 +1,38 @@
+export const mockReels = [
+  {
+    id: '1',
+    username: 'alex',
+    caption: 'Amazing sunset view 🌅',
+    likes: 1200,
+    comments: 45,
+    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    thumbnail: 'https://picsum.photos/400/700',
+  },
+  {
+    id: '2',
+    username: 'jenny',
+    caption: 'Travel day ✈️',
+    likes: 980,
+    comments: 42,
+    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    thumbnail: 'https://picsum.photos/401/700',
+  },
+  {
+    id: '3',
+    username: 'mike',
+    caption: 'Coffee time ☕',
+    likes: 987,
+    comments: 65,
+    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    thumbnail: 'https://picsum.photos/402/700',
+  },
+  {
+    id: '4',
+    username: 'emma',
+    caption: 'Weekend vibes 🎉',
+    likes: 1543,
+    comments: 97,
+    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    thumbnail: 'https://picsum.photos/403/700',
+  },
+];

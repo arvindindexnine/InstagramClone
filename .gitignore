@@ -85,3 +85,6 @@ ios/Pods/
 # Temporary files
 *.tmp
 *.temp
+
+# Specs folder - development documentation
+specs/

@@ -6,75 +6,85 @@ import {
   FlatList, 
   TouchableOpacity, 
   Text, 
-  Image 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { fetchUsers } from '../../services/api';
-import colors from '../../theme/colors';
+import { useLazyQuery } from '@apollo/client';
+import { useTheme } from '../../theme/ThemeContext';
+import { SEARCH_USERS } from '../../graphql/users/searchUsers.query';
+
+type User = {
+  _id: string;
+  username: string;
+};
 
 export default function SearchScreen() {
+  const { theme } = useTheme();
   const [query, setQuery] = useState('');
-  const [users, setUsers] = useState<any[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
+  const [searchUsers, { loading }] = useLazyQuery(SEARCH_USERS, {
+    onCompleted: (data) => {
+      setUsers(data.searchUsers || []);
+    },
+    onError: (error) => {
+      console.log('Search error:', error);
+      setUsers([]);
+    },
+  });
 
   useEffect(() => {
-    if (query.trim()) {
-      const filtered = users.filter((user: any) => 
-        user.username.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredUsers(filtered);
+    if (query.length > 1) {
+      searchUsers({ variables: { query } });
     } else {
-      setFilteredUsers([]);
+      setUsers([]);
     }
-  }, [query, users]);
+  }, [query]);
 
-  async function loadUsers() {
-    const usersData = await fetchUsers();
-    setUsers(usersData);
-  }
-
-  function handleUserPress(user: any) {
-    (navigation as any).navigate('ChatDetail', {
-      userId: user.id,
-      username: user.username
+  function handleSelectUser(user: User) {
+    (navigation as any).navigate('Chat', {
+      screen: 'ChatDetail',
+      params: {
+        chatId: '',
+        otherUserId: user._id,
+        otherUsername: user.username,
+      },
     });
   }
 
-  function renderUser({ item }: any) {
+  function renderUser({ item }: { item: User }) {
     return (
-      <TouchableOpacity 
-        style={styles.userItem}
-        onPress={() => handleUserPress(item)}
-      >
-        <Image source={{ uri: item.image }} style={styles.avatar} />
-        <Text style={styles.username}>{item.username}</Text>
-      </TouchableOpacity>
+      <View style={[styles.userItem, { borderBottomColor: theme.inputBorder }]}>
+        <Text style={[styles.username, { color: theme.text }]}>{item.username}</Text>
+        <TouchableOpacity 
+          style={styles.arrowButton}
+          onPress={() => handleSelectUser(item)}
+        >
+          <Text style={[styles.arrowIcon, { color: theme.primary }]}>→</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.searchBar}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.text }]}
           value={query}
           onChangeText={setQuery}
           placeholder="Search users"
-          placeholderTextColor={colors.placeholder}
+          placeholderTextColor={theme.placeholder}
+          autoCapitalize="none"
         />
       </View>
       
-      {query.trim() && filteredUsers.length === 0 ? (
-        <Text style={styles.emptyText}>No users found</Text>
+      {query.length > 1 && users.length === 0 && !loading ? (
+        <Text style={[styles.emptyText, { color: theme.textMuted }]}>No users found</Text>
       ) : (
         <FlatList
-          data={filteredUsers}
-          keyExtractor={item => item.id.toString()}
+          data={users}
+          keyExtractor={item => item._id}
           renderItem={renderUser}
           showsVerticalScrollIndicator={false}
         />
@@ -86,7 +96,6 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
     paddingTop: 52,
   },
   searchBar: {
@@ -94,33 +103,31 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   input: {
-    backgroundColor: colors.inputBackground,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    color: colors.text,
     fontSize: 14,
   },
   userItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 12,
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.inputBackground,
+    paddingVertical: 14,
+    borderBottomWidth: 0.5,
   },
   username: {
-    color: colors.text,
     fontSize: 16,
     fontWeight: '500',
   },
+  arrowButton: {
+    padding: 8,
+  },
+  arrowIcon: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
   emptyText: {
-    color: colors.textMuted,
     textAlign: 'center',
     marginTop: 40,
     fontSize: 15,

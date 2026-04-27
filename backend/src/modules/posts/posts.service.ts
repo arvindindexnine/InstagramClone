@@ -7,8 +7,15 @@ import { Post, PostDocument } from './schemas/post.schema';
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  async createPost(caption: string, mediaUrl: string, type: string, userId: string): Promise<Post> {
-    const post = new this.postModel({ caption, mediaUrl, type, userId });
+  async createPost(username: string, caption: string, mediaUrl: string, type: string, userId: string): Promise<Post> {
+    const post = new this.postModel({ 
+      username,
+      caption, 
+      mediaUrl, 
+      type, 
+      userId,
+      createdAt: new Date()
+    });
     return post.save();
   }
 
@@ -22,5 +29,10 @@ export class PostsService {
 
   async getReels(): Promise<Post[]> {
     return this.postModel.find({ type: 'video' }).sort({ createdAt: -1 });
+  }
+
+  async deleteAllPosts(): Promise<boolean> {
+    await this.postModel.deleteMany({});
+    return true;
   }
 }

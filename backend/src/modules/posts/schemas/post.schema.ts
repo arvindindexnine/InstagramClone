@@ -16,6 +16,10 @@ export class Post {
 
   @Prop({ required: true })
   @Field()
+  username: string;
+
+  @Prop({ required: true })
+  @Field()
   mediaUrl: string;
 
   @Prop({ default: '' })
