@@ -2,15 +2,15 @@
 
 A full-stack Instagram clone built with React Native, NestJS, GraphQL, and MongoDB featuring real-time chat, post management, user authentication, and comprehensive social media functionality.
 
-## 🚀 Features Overview
+## Features Overview
 
-### 🔐 Authentication System
+### Authentication System
 - **User Registration**: Complete signup flow with username, email, and password validation
 - **Secure Login**: JWT token-based authentication with persistent sessions
 - **Auto-Login**: Automatic authentication using stored tokens in AsyncStorage
 - **Session Management**: Token validation and refresh mechanisms
 
-### 📱 Core Screens & Functionality
+### Core Screens & Functionality
 
 #### **Home Screen (Feed)**
 - **Combined Feed**: Displays user-created posts alongside curated dummy content
@@ -48,14 +48,14 @@ A full-stack Instagram clone built with React Native, NestJS, GraphQL, and Mongo
 - **Media Management**: Local video assets with proper attribution
 - **User Interface**: Instagram-style video controls and overlays
 
-### 🎨 UI/UX Features
+### UI/UX Features
 - **Responsive Design**: Adaptive layouts for different screen sizes
 - **Theme System**: Comprehensive light/dark mode implementation
 - **Smooth Animations**: Native-feeling transitions and interactions
 - **Loading States**: Proper loading indicators and skeleton screens
 - **Error Handling**: User-friendly error messages and retry mechanisms
 
-## 🏗️ Technical Architecture
+## Technical Architecture
 
 ### **Frontend Stack**
 - **React Native**: Cross-platform mobile development
@@ -73,7 +73,7 @@ A full-stack Instagram clone built with React Native, NestJS, GraphQL, and Mongo
 - **WebSocket Subscriptions**: Real-time communication for chat features
 - **GraphQL Subscriptions**: Live data updates using PubSub pattern
 
-## 📊 Data Flow Architecture
+## Data Flow Architecture
 
 ### **Authentication Flow**
 ```
@@ -98,7 +98,7 @@ HomeScreen → GraphQL Query + DummyJSON API → Data Combination →
 FlatList Rendering → Infinite Scroll → Cache Management
 ```
 
-## 🔧 GraphQL API Schema
+## GraphQL API Schema
 
 ### **Mutations**
 - `login(input: LoginInput!)`: User authentication
@@ -120,7 +120,7 @@ FlatList Rendering → Infinite Scroll → Cache Management
 ### **Subscriptions**
 - `messageReceived(chatId: String!)`: Real-time chat updates
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### **User Model**
 ```typescript
@@ -166,7 +166,7 @@ FlatList Rendering → Infinite Scroll → Cache Management
 }
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── frontend/                    # React Native Application
@@ -227,7 +227,7 @@ FlatList Rendering → Infinite Scroll → Cache Management
 └── update-ip.js              # Network Configuration Utility
 ```
 
-## 🚀 Setup & Installation
+## Setup & Installation
 
 ### **Prerequisites**
 - Node.js (v16 or higher)
@@ -294,7 +294,7 @@ npm start
 npm run android
 ```
 
-## 🔄 Key Implementation Details
+## Key Implementation Details
 
 ### **Real-time Chat Implementation**
 - **WebSocket Connection**: Persistent connection for instant message delivery
@@ -325,7 +325,7 @@ npm run android
 - **Dynamic Styling**: All components adapt to theme changes
 - **Smooth Transitions**: Native-feeling theme switching
 
-## 🛠️ Development Utilities
+## Development Utilities
 
 ### **Database Management**
 - **Reset All Data**: Complete database cleanup via ProfileScreen button
@@ -342,7 +342,7 @@ npm run android
 - **GraphQL DevTools**: Query and mutation debugging
 - **React Native Debugger**: Component and state inspection
 
-## 📱 User Experience Features
+## User Experience Features
 
 ### **Smooth Interactions**
 - **Optimistic Updates**: Immediate UI feedback for all user actions
@@ -356,7 +356,7 @@ npm run android
 - **Memory Management**: Proper cleanup of resources and subscriptions
 - **Bundle Optimization**: Minimized app size and startup time
 
-## 🔒 Security Features
+## Security Features
 
 ### **Authentication Security**
 - **Password Hashing**: Secure password storage using bcrypt
@@ -370,7 +370,7 @@ npm run android
 - **Secure Headers**: Proper HTTP security headers
 - **Environment Variables**: Sensitive data stored securely
 
-## 🚀 Deployment Ready
+## Deployment Ready
 
 ### **Production Considerations**
 - **Environment Configuration**: Separate configs for dev/staging/production
@@ -384,11 +384,11 @@ npm run android
 - **Caching Strategy**: Apollo Client caching for optimal performance
 - **Code Splitting**: Optimized bundle loading
 
-## 📄 License
+## License
 
 MIT License - feel free to use this project for learning and development purposes.
 
-## 🤝 Contributing
+## Contributing
 
 This project follows clean code principles and human-readable implementations. Contributions should maintain:
 - Simple and direct code structure
@@ -399,4 +399,4 @@ This project follows clean code principles and human-readable implementations. C
 
 ---
 
-**Built with ❤️ using React Native, NestJS, GraphQL, and MongoDB**
+**Built with care using React Native, NestJS, GraphQL, and MongoDB**
